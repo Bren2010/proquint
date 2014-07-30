@@ -3,6 +3,7 @@ package proquint
 import (
     "bytes"
     "strings"
+    "regexp"
 )
 
 var (
@@ -22,6 +23,28 @@ var (
     }
 )
 
+/**
+* Tests if a given string is a Proquint identifier
+*
+* @param {string} str The candidate string.
+*
+* @return {bool} Whether or not it qualifies.
+* @return {error} Error
+*/
+func IsProquint(str string) (bool, error) {
+    exp := "^([abdfghijklmnoprstuvz]{5}-)*[abdfghijklmnoprstuvz]{5}$"
+    ok, err := regexp.MatchString(exp, str)
+    
+    return ok, err
+}
+
+/**
+* Encodes an arbitrary byte slice into an identifier.
+*
+* @param {[]byte} buf Slice of bytes to encode.
+*
+* @return {string} The given byte slice as an identifier.
+*/
 func Encode(buf []byte) string {
     var out bytes.Buffer
     
@@ -50,6 +73,13 @@ func Encode(buf []byte) string {
     return out.String()
 }
 
+/**
+* Decodes an identifier into its corresponding byte slice.
+*
+* @param {string} str Identifier to convert.
+*
+* @return {[]byte} The identifier as a byte slice.
+*/
 func Decode(str string) []byte {
     var (
         out bytes.Buffer
