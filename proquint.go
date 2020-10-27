@@ -74,11 +74,11 @@ func Encode(buf []byte) string {
         var n uint16 = (uint16(buf[i]) * 256) + uint16(buf[i + 1])
         
         var (
-            c1 = n         & 0x0f
-            v1 = (n >> 4)  & 0x03
+            c3 = n         & 0x0f
+            v2 = (n >> 4)  & 0x03
             c2 = (n >> 6)  & 0x0f
-            v2 = (n >> 10) & 0x03
-            c3 = (n >> 12) & 0x0f
+            v1 = (n >> 10) & 0x03
+            c1 = (n >> 12) & 0x0f
         )
         
         out.WriteByte(conse[c1])
@@ -109,11 +109,11 @@ func Decode(str string) []byte {
     )
     
     for i := 0; i < len(bits); i++ {
-        var x uint16 = consd[bits[i][0]] +
-                (vowsd[bits[i][1]] <<  4) +
+        var x uint16 = consd[bits[i][4]] +
+                (vowsd[bits[i][3]] <<  4) +
                 (consd[bits[i][2]] <<  6) +
-                (vowsd[bits[i][3]] << 10) + 
-                (consd[bits[i][4]] << 12)
+                (vowsd[bits[i][1]] << 10) + 
+                (consd[bits[i][0]] << 12)
         
         out.WriteByte(byte(x >> 8))
         out.WriteByte(byte(x))
